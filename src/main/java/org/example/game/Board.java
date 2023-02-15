@@ -4,14 +4,19 @@ import java.util.*;
 
 public class Board {
     private Figure[][] board;
+    private Figure[] inactiveFigures;
     private List<Figure> activeFigures = new ArrayList<>();
     private Level level;
-    private int round = 0;
+    private int round = 1;
+    private Figure currentFigure;
+  //  private List<Figure> nextFigures = new ArrayList<>();
+    private Figure nextFigure;
+
     Scanner scanner = new Scanner(System.in);
     Random random = new Random();
     public Board(){
         //Вибір складності
-        System.out.println("Choose level: 1 - Easy\n 2 - Medium\n 3 - Hard");
+        System.out.println("\nChoose level:\n1 - Easy\n2 - Medium\n3 - Hard");
         int scanLevel = scanner.nextInt();
         this.level = Level.EASY;
 
@@ -22,32 +27,80 @@ public class Board {
         if (scanLevel==3)
             level = Level.HARD;
         board = new Figure[level.getHigh()][level.getWidth()];
+        inactiveFigures = new Figure[level.getWidth()];
+
         //Тут будуть правила гри
         System.out.println("");
         //тут рандом який генерить першу фігуру на борді
-        int pos = random.nextInt(board[0].length);
-        Figure figure = Level // Level.ЯКИЙСЬМЕТОД З ЛЕВЕЛУ ЯКИЙ ГЕНЕРУЄ Рандомний символ
+        currentFigure = new Figure(level.getLetter()); // Level.ЯКИЙСЬМЕТОД З ЛЕВЕЛУ ЯКИЙ ГЕНЕРУЄ Рандомний символ
+        activeFigures.add(currentFigure);
+
+        int randomBoard0length = random.nextInt(board[0].length);
+        board[0][randomBoard0length] = currentFigure;
+
+        nextFigure = new Figure(level.getLetter());
+        //nextFigure.add(nextFigure); //додаємо в 0 поз наступну фігуру
+        int randomIntFromInactiveArr= random.nextInt(inactiveFigures.length);
+        inactiveFigures[randomIntFromInactiveArr] = nextFigure;
+
+        nextFigure.setX(randomIntFromInactiveArr);
+
+        currentFigure.setX(randomBoard0length);
+        currentFigure.setY(0);
+
         menu();
     }
     private void menu(){
+
+        if (round%3==0){
+            activeFigures.add(nextFigure);
+            board[0][nextFigure.getX()] = nextFigure;
+            inactiveFigures[nextFigure.getX()] = null;
+
+            nextFigure = new Figure(level.getLetter());
+            createInactiveFig();
+        }
         print();
 
-        if (round%2==0){
+
+        System.out.println("\n1. left\n2. right\n3. bottom\n4. back to menu");
+        int chooseMove = scanner.nextInt();
+        int previousY=activeFigures.get(0).getY();
+        if (chooseMove==1){
+        }
+        if (chooseMove==2){
 
         }
+        if (chooseMove==3){
 
-
-
-        System.out.println("1. left\n 2. right\n 3. bottom\n 4. back to menu");
-        int chooseMove = scanner.nextInt();
-        if (chooseMove==1){}
-        if (chooseMove==2){}
-        if (chooseMove==3){}
+            activeFigures.get(0).setY(activeFigures.get(0).getY()+1); //зсунули вниз на 1 по борду активну фігуру в листі з поз 0
+            board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
+            board[previousY][activeFigures.get(0).getX()] = null;
+        }
+        for (Figure figure:activeFigures){
+            int prevPos =figure.getY();
+            figure.setY(prevPos+1);
+            board[figure.getY()][figure.getX()] = figure;
+            board[prevPos][figure.getX()] = null;
+        }
         if (chooseMove==4){return;}
+        round++;
 
         menu();
     }
+    private void createInactiveFig() {
+        int randomIntFromInactiveArr= random.nextInt(inactiveFigures.length);
+        inactiveFigures[randomIntFromInactiveArr] = nextFigure;
+        nextFigure.setX(randomIntFromInactiveArr);
+    }
+
+
     public void print(){
+        for (int x=0;x<inactiveFigures.length;x++){
+            System.out.print(inactiveFigures[x]==null?"   ":inactiveFigures[x]);
+
+        }
+        System.out.println();
         for (int x=0;x<board.length;x++){
             for (int y=0;y<board[x].length;y++){
                 System.out.print("|");

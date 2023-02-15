@@ -3,6 +3,7 @@ package org.example.game;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public enum Level {
     EASY(4,5){
@@ -16,7 +17,7 @@ public enum Level {
             Collections.addAll(letters,"x","y","z");
         }
     },
-    HARD(8,8){
+    HARD(20,8){
         {
             Collections.addAll(letters,"x","y","z","v");
         }
@@ -42,5 +43,9 @@ public enum Level {
         return letters;
     }
     //ЗРОБИТИ МЕТОД для того щоб отримати рандомний символ в залежності від складності
-
+    public String getLetter(){
+        Random random = new Random();
+        int randomIndex = random.nextInt(letters.size());
+        return letters.get(randomIndex);
+    }
 }

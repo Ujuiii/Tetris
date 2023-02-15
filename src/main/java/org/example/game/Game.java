@@ -11,7 +11,7 @@ public class Game {
     private static void start() {
 
         System.out.println("Welcome to tetris game");
-        System.out.println("1. New game \n 2. Records \n 3. Quit");
+        System.out.println("\n1. New game \n2. Records \n3. Quit");
         int menuChoose = scanner.nextInt();
         if (menuChoose == 1) {
             Board board = new Board();
