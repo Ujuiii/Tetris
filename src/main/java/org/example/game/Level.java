@@ -17,7 +17,7 @@ public enum Level {
             Collections.addAll(letters,"x","y","z");
         }
     },
-    HARD(20,8){
+    HARD(10,8){
         {
             Collections.addAll(letters,"x","y","z","v");
         }
