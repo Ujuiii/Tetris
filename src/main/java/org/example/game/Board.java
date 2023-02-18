@@ -8,7 +8,7 @@ public class Board {
     private List<Figure> activeFigures = new ArrayList<>();
     private Level level;
     private int round = 0;
-    private  int score=0;
+    private int score = 0;
     private Figure currentFigure;
     //  private List<Figure> nextFigures = new ArrayList<>();
     private Figure nextFigure;
@@ -71,7 +71,6 @@ public class Board {
         move();
 
         check();
-
         for (Figure figure : activeFigures) {
             int prevPos = figure.getY();
             figure.setY(prevPos + 1);
@@ -79,8 +78,13 @@ public class Board {
             board[prevPos][figure.getX()] = null;
         }
 
+        for (int x=0; x<board.length;x++){
+            scoreRow(x);
+        }
+        for (int x=0; x<board[0].length;x++){
+            scoreVert(x);
+        }
 
-        score();
         round++;
 
         menu();
@@ -94,7 +98,7 @@ public class Board {
 
     public void move() {
         try {
-            System.out.println("\n1. left\n2. right\n3. bottom");
+            System.out.println("\nChoose your move:\n1. left\n2. right\n3. bottom\nYOUR SCORE:"+score+"\nRound:"+round);
             int chooseMove = scanner.nextInt();
             int previousY = activeFigures.get(0).getY();
             int previousX = activeFigures.get(0).getX();
@@ -114,13 +118,12 @@ public class Board {
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][activeFigures.get(0).getX()] = null;
             }
-        }
-        catch (ArrayIndexOutOfBoundsException b){
-        }
-        catch (IndexOutOfBoundsException a) {
+        } catch (ArrayIndexOutOfBoundsException b) {
+        } catch (IndexOutOfBoundsException a) {
         }
     }
-//Видаляє з активних фігур коли заходить в "фіксовану зону"
+
+    //Видаляє з активних фігур коли заходить в "фіксовану зону"
     private void check() {
         try {
 
@@ -129,33 +132,74 @@ public class Board {
                 activeFigures.remove(0);
             }
 
-        }
-        catch (ArrayIndexOutOfBoundsException b){
-        }
-        catch (IndexOutOfBoundsException  b) {
+        } catch (ArrayIndexOutOfBoundsException b) {
+        } catch (IndexOutOfBoundsException b) {
         }
 
 
     }
-    //Видаляє 3 попідряд однакові фігури, та додає рахунок гравцю
-    public void score(){
-        for (int x=0;x<board[0].length;x++){
-            for (int y=board.length-1; y>=0;y--){
-                if (board[y][x]!=null) {
-                    for (int z = 0;z<y-1;z++){
-                        if (y-2>0 && board[y][x]==board[y-1][x] && board[y][x]==board[y-2][x]) {
-                            board[y][x] = null;
-                            board[y-1][x] = null;
-                            board[y-2][x] = null;
-                            score++;
-                        }
-                    }
+    public void scoreVert(int vert){
+        for (int y=0;y< board.length;y++){
+            try {
+                if (board[y][vert]!=null && board[y][vert].getSymbol().equals(board[y-1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y-2][vert].getSymbol())
+                        && board[y][vert].getSymbol().equals(board[y+1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y+2][vert].getSymbol()) ) {
+                    board[y][vert] = null;
+                    board[y-1][vert] = null;
+                    board[y-2][vert] = null;
+                    board[y+1][vert] = null;
+                    board[y+2][vert] = null;
+                    this.score += 4;
                 }
+
+
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException a) {
+            }
+            try {
+                if (board[y][vert]!=null && board[y][vert].getSymbol().equals(board[y-1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y-2][vert].getSymbol())) {
+                    board[y][vert] = null;
+                    board[y-1][vert] = null;
+                    board[y-2][vert] = null;
+                    this.score++;
+                }
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException b) {
             }
         }
-
-
     }
+
+    //Видаляє 3,5 попідряд горизонтальні однакові фігури, та додає рахунок гравцю
+    public void scoreRow(int row) {
+//        if ( x == board.length-1 && y == board[x].length-1){
+//            return;
+//        }
+
+
+        for (int y = 0; y < board[row].length; y++) {
+            try {
+                if (board[row][y]!=null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())
+                        && board[row][y].getSymbol().equals(board[row][y + 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y + 2].getSymbol()) ) {
+                    board[row][y] = null;
+                    board[row][y - 1] = null;
+                    board[row][y - 2] = null;
+                    board[row][y + 1] = null;
+                    board[row][y + 2] = null;
+                    this.score += 4;
+                }
+
+
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException a) {
+            }
+            try {
+                if (board[row][y]!=null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol())  && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())) {
+                    board[row][y] = null;
+                    board[row][y - 1] = null;
+                    board[row][y - 2] = null;
+                    this.score++;
+                }
+            } catch (ArrayIndexOutOfBoundsException | NullPointerException b) {
+            }
+        }
+    }
+
 
     public void print() {
         for (int x = 0; x < inactiveFigures.length; x++) {
