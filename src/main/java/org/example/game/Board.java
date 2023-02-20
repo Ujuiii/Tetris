@@ -8,6 +8,11 @@ public class Board {
     private List<Figure> activeFigures = new ArrayList<>();
     private Level level;
     private int round = 0;
+    private String playerName;
+    //Якщо тру виходить в головне меню
+    private boolean isFinish;
+
+    //Кожну n кількість дій додається фігура в лист активних фігур з неактивних фігур масива
     private int score = 0;
     private Figure currentFigure;
     //  private List<Figure> nextFigures = new ArrayList<>();
@@ -54,11 +59,37 @@ public class Board {
         currentFigure.setY(0);
 
         menu();
+
     }
 
     private void menu() {
+        move();
+        if (isFinish) {
+            return;
+        }
+        for (Figure figure : activeFigures) {
+            int prevPos = figure.getY();
+            figure.setY(prevPos + 1);
+            board[figure.getY()][figure.getX()] = figure;
+            board[prevPos][figure.getX()] = null;
+        }
+        check();
+        for (int x = 0; x < board.length; x++) {
+            scoreRow(x);
+        }
+        for (int x = 0; x < board[0].length; x++) {
+            scoreVert(x);
+        }
+        round++;
+        //Гра закінчилася якщо тру
+        isFinish();
+        menu();
+    }
 
-        if (round % 2 == 0 && round != 0 || activeFigures.isEmpty()) {
+    //кожні 2 раунди додає фігуру з неактивного масивв в лист активних, або активний лист пустий теж додає
+    private void addNextFig() {
+        if (round % 2 == 0 && round != 0 || (activeFigures.isEmpty() && round % 2 != 0)) {
+//        if (counter==2 || ) {
             activeFigures.add(nextFigure);
             board[0][nextFigure.getX()] = nextFigure; //додаємо в борд некст фігуру
             inactiveFigures[nextFigure.getX()] = null; //видаляємо з інактивних
@@ -66,48 +97,46 @@ public class Board {
             nextFigure = new Figure(level.getLetter());
             createInactiveFig();
         }
-        print();
-        check();
-        move();
-
-        check();
-        for (Figure figure : activeFigures) {
-            int prevPos = figure.getY();
-            figure.setY(prevPos + 1);
-            board[figure.getY()][figure.getX()] = figure;
-            board[prevPos][figure.getX()] = null;
-        }
-
-        for (int x=0; x<board.length;x++){
-            scoreRow(x);
-        }
-        for (int x=0; x<board[0].length;x++){
-            scoreVert(x);
-        }
-
-        round++;
-
-        menu();
     }
 
+    private void isFinish(){
+        for (int x=0; x<board.length;x++){
+            for (int y=0; y<board[x].length;y++){
+                if (board[x][y]==null){
+                    isFinish=false;
+                    return;
+                }
+            }
+        }
+        System.out.println("Please enter your name");
+        playerName = scanner.next();
+        isFinish=true;
+    }
     private void createInactiveFig() {
-        int randomIntFromInactiveArr = random.nextInt(inactiveFigures.length);
+        int randomIntFromInactiveArr;
+        do {
+            randomIntFromInactiveArr = random.nextInt(inactiveFigures.length);
+        } while (board[0][randomIntFromInactiveArr]!=null);
         inactiveFigures[randomIntFromInactiveArr] = nextFigure;
         nextFigure.setX(randomIntFromInactiveArr);
     }
 
     public void move() {
+
         try {
-            System.out.println("\nChoose your move:\n1. left\n2. right\n3. bottom\nYOUR SCORE:"+score+"\nRound:"+round);
+            addNextFig();
+            print();
+            System.out.println("\nChoose your move:\n1. left\n2. right\n3. bottom" +
+                    "\n4.Finish game\nYOUR SCORE:" + score + "\nRound:" + round);
             int chooseMove = scanner.nextInt();
             int previousY = activeFigures.get(0).getY();
             int previousX = activeFigures.get(0).getX();
-            if (chooseMove == 1) {
+            if (chooseMove == 1 && activeFigures.get(0).getX() != 0) {
                 activeFigures.get(0).setX(activeFigures.get(0).getX() - 1); //зсунули вліво на 1 по борду активну фігуру в листі з поз 0
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][previousX] = null;
             }
-            if (chooseMove == 2) {
+            if (chooseMove == 2 && activeFigures.get(0).getX() != board[0].length - 1) {
                 activeFigures.get(0).setX(activeFigures.get(0).getX() + 1); //зсунули вліво на 1 по борду активну фігуру в листі з поз 0
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][previousX] = null;
@@ -118,9 +147,15 @@ public class Board {
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][activeFigures.get(0).getX()] = null;
             }
+            if (chooseMove==4){
+                System.out.println("Game is over");
+                isFinish=true;
+            }
         } catch (ArrayIndexOutOfBoundsException b) {
         } catch (IndexOutOfBoundsException a) {
         }
+        check();
+
     }
 
     //Видаляє з активних фігур коли заходить в "фіксовану зону"
@@ -138,16 +173,17 @@ public class Board {
 
 
     }
-    public void scoreVert(int vert){
-        for (int y=0;y< board.length;y++){
+
+    public void scoreVert(int vert) {
+        for (int y = 0; y < board.length; y++) {
             try {
-                if (board[y][vert]!=null && board[y][vert].getSymbol().equals(board[y-1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y-2][vert].getSymbol())
-                        && board[y][vert].getSymbol().equals(board[y+1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y+2][vert].getSymbol()) ) {
+                if (board[y][vert] != null && board[y][vert].getSymbol().equals(board[y - 1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y - 2][vert].getSymbol())
+                        && board[y][vert].getSymbol().equals(board[y + 1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y + 2][vert].getSymbol())) {
                     board[y][vert] = null;
-                    board[y-1][vert] = null;
-                    board[y-2][vert] = null;
-                    board[y+1][vert] = null;
-                    board[y+2][vert] = null;
+                    board[y - 1][vert] = null;
+                    board[y - 2][vert] = null;
+                    board[y + 1][vert] = null;
+                    board[y + 2][vert] = null;
                     this.score += 4;
                 }
 
@@ -155,10 +191,10 @@ public class Board {
             } catch (ArrayIndexOutOfBoundsException | NullPointerException a) {
             }
             try {
-                if (board[y][vert]!=null && board[y][vert].getSymbol().equals(board[y-1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y-2][vert].getSymbol())) {
+                if (board[y][vert] != null && board[y][vert].getSymbol().equals(board[y - 1][vert].getSymbol()) && board[y][vert].getSymbol().equals(board[y - 2][vert].getSymbol())) {
                     board[y][vert] = null;
-                    board[y-1][vert] = null;
-                    board[y-2][vert] = null;
+                    board[y - 1][vert] = null;
+                    board[y - 2][vert] = null;
                     this.score++;
                 }
             } catch (ArrayIndexOutOfBoundsException | NullPointerException b) {
@@ -175,8 +211,8 @@ public class Board {
 
         for (int y = 0; y < board[row].length; y++) {
             try {
-                if (board[row][y]!=null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())
-                        && board[row][y].getSymbol().equals(board[row][y + 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y + 2].getSymbol()) ) {
+                if (board[row][y] != null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())
+                        && board[row][y].getSymbol().equals(board[row][y + 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y + 2].getSymbol())) {
                     board[row][y] = null;
                     board[row][y - 1] = null;
                     board[row][y - 2] = null;
@@ -189,7 +225,7 @@ public class Board {
             } catch (ArrayIndexOutOfBoundsException | NullPointerException a) {
             }
             try {
-                if (board[row][y]!=null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol())  && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())) {
+                if (board[row][y] != null && board[row][y].getSymbol().equals(board[row][y - 1].getSymbol()) && board[row][y].getSymbol().equals(board[row][y - 2].getSymbol())) {
                     board[row][y] = null;
                     board[row][y - 1] = null;
                     board[row][y - 2] = null;
