@@ -14,7 +14,6 @@ public class Board {
 
     //Кожну n кількість дій додається фігура в лист активних фігур з неактивних фігур масива
     private int score = 0;
-    private Figure currentFigure;
     //  private List<Figure> nextFigures = new ArrayList<>();
     private Figure nextFigure;
     private int countMove;
@@ -22,97 +21,122 @@ public class Board {
     Scanner scanner = new Scanner(System.in);
     Random random = new Random();
 
-    public Board() {
-        //Вибір складності
-        System.out.println("\nChoose level:\n1 - Easy\n2 - Medium\n3 - Hard");
-        int scanLevel = scanner.nextInt();
-        this.level = Level.EASY;
-
-        if (scanLevel == 1)
-            level = Level.EASY;
-        if (scanLevel == 2)
-            level = Level.MEDIUM;
-        if (scanLevel == 3)
-            level = Level.HARD;
+    public Board(Level level){
         board = new Figure[level.getHigh()][level.getWidth()];
         inactiveFigures = new Figure[level.getWidth()];
 
         //Тут будуть правила гри
-        System.out.println("");
+        System.out.println("Rules: You have a figures and you have to move them to score points, " +
+                " each move they move down by themselves. When figures placed in a row or in a column of N number of figures," +
+                " they will disappear and add points to the player.");
         //тут рандом який генерить першу фігуру на борді
-        currentFigure = new Figure(level.getLetter()); // Level.ЯКИЙСЬМЕТОД З ЛЕВЕЛУ ЯКИЙ ГЕНЕРУЄ Рандомний символ
+        Figure currentFigure = new Figure(level.getLetter()); // Level.ЯКИЙСЬМЕТОД З ЛЕВЕЛУ ЯКИЙ ГЕНЕРУЄ Рандомний символ
         activeFigures.add(currentFigure);
-
         int randomBoard0length = random.nextInt(board[0].length);
         board[0][randomBoard0length] = currentFigure;
-
-        nextFigure = new Figure(level.getLetter());
-
-        //nextFigure.add(nextFigure); //додаємо в 0 поз наступну фігуру
-//        int randomIntFromInactiveArr= random.nextInt(inactiveFigures.length);
-//        inactiveFigures[randomIntFromInactiveArr] = nextFigure;
-//
-//        nextFigure.setX(randomIntFromInactiveArr);
-        createInactiveFig();
-
         currentFigure.setX(randomBoard0length);
         currentFigure.setY(0);
-
-        menu();
-
+        nextFigure = new Figure(level.getLetter());
+        createInactiveFig();
+    }
+//    public Board() {
+//
+//        board = new Figure[level.getHigh()][level.getWidth()];
+//        inactiveFigures = new Figure[level.getWidth()];
+//
+//        //Тут будуть правила гри
+//        System.out.println("Rules: You have a figures and you have to move them to score points, " +
+//                " each move they move down by themselves. When figures placed in a row or in a column of N number of figures," +
+//                " they will disappear and add points to the player.");
+//        //тут рандом який генерить першу фігуру на борді
+//        Figure currentFigure = new Figure(level.getLetter()); // Level.ЯКИЙСЬМЕТОД З ЛЕВЕЛУ ЯКИЙ ГЕНЕРУЄ Рандомний символ
+//        activeFigures.add(currentFigure);
+//        int randomBoard0length = random.nextInt(board[0].length);
+//        board[0][randomBoard0length] = currentFigure;
+//        currentFigure.setX(randomBoard0length);
+//        currentFigure.setY(0);
+//        nextFigure = new Figure(level.getLetter());
+//        createInactiveFig();
+//        menu();
+//    }
+    public int getScore(){
+        return score;
+    }
+    public int getRound(){
+        return round;
+    }
+    public Level getLevel(){
+        return level;
     }
 
+
+    //all logic here
     private void menu() {
+        deleteIfFix(activeFigures.get(0));
+
         move();
         if (isFinish) {
             return;
         }
-        for (Figure figure : activeFigures) {
+//        for (Figure figure : activeFigures) {
+//            int prevPos = figure.getY();
+//            //перевіряє чи є в тому ж стовпці на 1 нижче фігура,
+//                figure.setY(prevPos + 1);
+//                board[figure.getY()][figure.getX()] = figure;
+//                board[prevPos][figure.getX()] = null;
+//        }
+        for (int i=activeFigures.size()-1;i>=0;i--){
+            Figure figure = activeFigures.get(i);
             int prevPos = figure.getY();
-            figure.setY(prevPos + 1);
-            board[figure.getY()][figure.getX()] = figure;
-            board[prevPos][figure.getX()] = null;
+            //перевіряє чи є в тому ж стовпці на 1 нижче фігура,
+                figure.setY(prevPos + 1);
+                board[figure.getY()][figure.getX()] = figure;
+                board[prevPos][figure.getX()] = null;
+
+            deleteIfFix(figure);
         }
-        check();
+
+
+
+
+        if ((activeFigures.isEmpty() && round % 2 != 0) || round % 2 == 0 && round != 0) {
+            addNextFig();
+        }
         for (int x = 0; x < board.length; x++) {
             scoreRow(x);
         }
         for (int x = 0; x < board[0].length; x++) {
             scoreVert(x);
         }
-        round++;
+
         //Гра закінчилася якщо тру
         isFinish();
         menu();
     }
 
     //кожні 2 раунди додає фігуру з неактивного масивв в лист активних, або активний лист пустий теж додає
-    private void addNextFig() {
-        if (round % 2 == 0 && round != 0 || (activeFigures.isEmpty() && round % 2 != 0)) {
-//        if (counter==2 || ) {
-            activeFigures.add(nextFigure);
+    public void addNextFig() {
+            activeFigures.add(nextFigure); //додаємо з інактивного масива в активний лист
             board[0][nextFigure.getX()] = nextFigure; //додаємо в борд некст фігуру
             inactiveFigures[nextFigure.getX()] = null; //видаляємо з інактивних
 
             nextFigure = new Figure(level.getLetter());
             createInactiveFig();
-        }
     }
 
-    private void isFinish(){
+    public boolean isFinish(){
         for (int x=0; x<board.length;x++){
             for (int y=0; y<board[x].length;y++){
                 if (board[x][y]==null){
                     isFinish=false;
-                    return;
+                    return false;
                 }
             }
         }
-        System.out.println("Please enter your name");
-        playerName = scanner.next();
         isFinish=true;
+        return true;
     }
-    private void createInactiveFig() {
+    public void createInactiveFig() {
         int randomIntFromInactiveArr;
         do {
             randomIntFromInactiveArr = random.nextInt(inactiveFigures.length);
@@ -121,17 +145,13 @@ public class Board {
         nextFigure.setX(randomIntFromInactiveArr);
     }
 
-    public void move() {
-
+    public void move(int direction) {
         try {
-            addNextFig();
-            print();
-            System.out.println("\nChoose your move:\n1. left\n2. right\n3. bottom" +
-                    "\n4.Finish game\nYOUR SCORE:" + score + "\nRound:" + round);
+           // System.out.println("\nYOUR SCORE:" + score + "\nRound:" + round);
             int chooseMove = scanner.nextInt();
             int previousY = activeFigures.get(0).getY();
             int previousX = activeFigures.get(0).getX();
-            if (chooseMove == 1 && activeFigures.get(0).getX() != 0) {
+            if (chooseMove == 1 && activeFigures.get(0).getX() != 0) { //контролює вихід вліво за межі масиву
                 activeFigures.get(0).setX(activeFigures.get(0).getX() - 1); //зсунули вліво на 1 по борду активну фігуру в листі з поз 0
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][previousX] = null;
@@ -141,37 +161,37 @@ public class Board {
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][previousX] = null;
             }
-            if (chooseMove == 3) {
-
+            if (chooseMove == 3 ) {
                 activeFigures.get(0).setY(activeFigures.get(0).getY() + 1); //зсунули вниз на 1 по борду активну фігуру в листі з поз 0
                 board[activeFigures.get(0).getY()][activeFigures.get(0).getX()] = activeFigures.get(0);
                 board[previousY][activeFigures.get(0).getX()] = null;
             }
-            if (chooseMove==4){
-                System.out.println("Game is over");
-                isFinish=true;
-            }
+
+            deleteIfFix(activeFigures.get(0));
         } catch (ArrayIndexOutOfBoundsException b) {
         } catch (IndexOutOfBoundsException a) {
         }
-        check();
+
+        round++;
+
 
     }
 
     //Видаляє з активних фігур коли заходить в "фіксовану зону"
-    private void check() {
+    private boolean deleteIfFix(Figure figure) {
         try {
 
-            if (activeFigures.get(0).getY() == board.length - 1
-                    || board[activeFigures.get(0).getY() + 1][activeFigures.get(0).getX()] != null) {
-                activeFigures.remove(0);
+            if (figure.getY() == board.length - 1
+                    || board[figure.getY() + 1][figure.getX()] != null) {
+                activeFigures.remove(figure);
+                return true;
             }
 
         } catch (ArrayIndexOutOfBoundsException b) {
         } catch (IndexOutOfBoundsException b) {
         }
 
-
+        return false;
     }
 
     public void scoreVert(int vert) {
@@ -184,6 +204,7 @@ public class Board {
                     board[y - 2][vert] = null;
                     board[y + 1][vert] = null;
                     board[y + 2][vert] = null;
+                    //додає балы коли згорають фігури
                     this.score += 4;
                 }
 
@@ -195,6 +216,7 @@ public class Board {
                     board[y][vert] = null;
                     board[y - 1][vert] = null;
                     board[y - 2][vert] = null;
+                    //додає балы коли згорають фігури
                     this.score++;
                 }
             } catch (ArrayIndexOutOfBoundsException | NullPointerException b) {
@@ -258,4 +280,5 @@ public class Board {
         }
 
     }
+
 }

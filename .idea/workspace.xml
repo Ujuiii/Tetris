@@ -4,10 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69376841-5cd1-440e-abf9-af43dc803735" name="Changes" comment="Added exceptions, check() and score() methods. In method move() added 2 more actions(left and right)">
+    <list default="true" id="69376841-5cd1-440e-abf9-af43dc803735" name="Changes" comment="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled">
+      <change afterPath="$PROJECT_DIR$/Score.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/GameController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/InputController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/StorageController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/User.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Level.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +23,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="Enum" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -47,15 +53,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "settings.editor.selected.configurable": "preferences.lookFeel"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
-}]]></component>
-  <component name="RunManager">
+}</component>
+  <component name="RunManager" selected="Application.Main">
     <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.game.Game" />
       <module name="Tetris" />
@@ -69,8 +75,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.example.game.Main" />
+      <module name="Tetris" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.example.game.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Game" />
       </list>
     </recent_temporary>
@@ -126,12 +146,31 @@
       <option name="project" value="LOCAL" />
       <updated>1676623945009</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Added scores methods(each 3 vertical or in a row figure &quot;eats&quot; and adding points to score)">
+      <created>1676711711347</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1676711711347</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled">
+      <created>1676901979122</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1676901979122</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="85b63334-099e-4145-a26f-a1a37f5ec8f0">
+          <value>
+            <State />
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State>
@@ -151,6 +190,11 @@
         </entry>
       </map>
     </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="85b63334-099e-4145-a26f-a1a37f5ec8f0" value="TOOL_WINDOW" />
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Test commit" />
@@ -158,20 +202,22 @@
     <MESSAGE value="Added Menus for start(), constructor Board() and implement levels" />
     <MESSAGE value="Added createInactiveFig() method, upgraded logic(after every 2 rounds new  inactive figures appears, after each round active figures moves 1 figure down, added action &quot;Down&quot; for figures)" />
     <MESSAGE value="Added exceptions, check() and score() methods. In method move() added 2 more actions(left and right)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added exceptions, check() and score() methods. In method move() added 2 more actions(left and right)" />
+    <MESSAGE value="Added scores methods(each 3 vertical or in a row figure &quot;eats&quot; and adding points to score)" />
+    <MESSAGE value="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled" />
+    <option name="LAST_COMMIT_MESSAGE" value="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/game/Game.java</url>
-          <line>8</line>
+          <line>7</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/game/Board.java</url>
-          <line>80</line>
-          <option name="timeStamp" value="7" />
+          <line>101</line>
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 public enum Level {
-    EASY(4,5){
+    EASY(4,4){
         {
             Collections.addAll(letters,"x","y");
         }
