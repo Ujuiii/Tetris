@@ -23,7 +23,6 @@ public class InputController {
     public static Level readLevel(String text){
         Level level = Level.EASY;
         try {
-            System.out.println(text);
             int choice = readInt(text);
             if (choice == 1)
                 level = Level.EASY;

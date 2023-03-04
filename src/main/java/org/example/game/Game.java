@@ -14,7 +14,7 @@ public class Game {
                 :bestPlayer.getName()+" "+bestPlayer.getScore()+" Points"));
         int menuChoose = InputController.readInt("\n1. New game \n2. Records \n3. Quit");
         if (menuChoose == 1) {
-            GameController gameController = new GameController();
+            new GameController();
         }
         if (menuChoose == 2) {
             records();

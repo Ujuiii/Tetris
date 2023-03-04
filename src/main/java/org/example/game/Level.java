@@ -6,20 +6,20 @@ import java.util.List;
 import java.util.Random;
 
 public enum Level {
-    EASY(4,4){
-        {
-            Collections.addAll(letters,"x","y");
-        }
-
-    },
-    MEDIUM(6,6){
+    EASY(10,8){
         {
             Collections.addAll(letters,"x","y","z");
         }
+
     },
-    HARD(10,8){
+    MEDIUM(8,6){
         {
             Collections.addAll(letters,"x","y","z","v");
+        }
+    },
+    HARD(6,5){
+        {
+            Collections.addAll(letters,"x","y","z","v","t");
         }
     };
     private int high;

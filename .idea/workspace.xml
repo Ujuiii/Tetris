@@ -4,15 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="69376841-5cd1-440e-abf9-af43dc803735" name="Changes" comment="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled">
-      <change afterPath="$PROJECT_DIR$/Score.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/GameController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/InputController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/StorageController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/game/User.java" afterDir="false" />
+    <list default="true" id="69376841-5cd1-440e-abf9-af43dc803735" name="Changes" comment="made the project more opp, added record save in files. Now all logic will be in GameController">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/GameController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/GameController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/InputController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/InputController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/game/Level.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/game/Level.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -61,7 +58,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.Main">
+  <component name="RunManager" selected="Application.Game">
     <configuration name="Game" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.game.Game" />
       <module name="Tetris" />
@@ -90,8 +87,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Main" />
         <item itemvalue="Application.Game" />
+        <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
   </component>
@@ -160,7 +157,14 @@
       <option name="project" value="LOCAL" />
       <updated>1676901979122</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="made the project more opp, added record save in files. Now all logic will be in GameController">
+      <created>1677402862973</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1677402862973</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -204,7 +208,8 @@
     <MESSAGE value="Added exceptions, check() and score() methods. In method move() added 2 more actions(left and right)" />
     <MESSAGE value="Added scores methods(each 3 vertical or in a row figure &quot;eats&quot; and adding points to score)" />
     <MESSAGE value="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled" />
-    <option name="LAST_COMMIT_MESSAGE" value="Now the game can end in two ways: 1. Player can choose finish in move() method&#10; 2. If every cell in board arr is filled" />
+    <MESSAGE value="made the project more opp, added record save in files. Now all logic will be in GameController" />
+    <option name="LAST_COMMIT_MESSAGE" value="made the project more opp, added record save in files. Now all logic will be in GameController" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -216,8 +221,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/org/example/game/Board.java</url>
-          <line>101</line>
-          <option name="timeStamp" value="4" />
+          <line>157</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

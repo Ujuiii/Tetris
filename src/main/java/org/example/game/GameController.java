@@ -12,21 +12,23 @@ public class GameController {
     }
     private void startGame(){
         board.print();
-        InputController.readInt("Move or Finish");
 
-        int direction = InputController.readInt("\nChoose your move:\n1. Left\n2. Right\n3. Bottom" + "\n4.Quit");
+
+        int direction = InputController.readInt("\nChoose your move:\n1. Left\n2. Right\n3. Bottom" + "\n4. Quit");
         if(direction==4){
-
+            saveRecords();
+            return;
 
         }
         board.move(direction);
-        boolean isFinish = board.isFinish();
-        if (isFinish){
-            finish();
+
+        if (board.isFinish()){
+            saveRecords();
+            return;
         }
         startGame();
     }
-    private static boolean finish(){
+    private static boolean saveRecords(){
         System.out.println("Game is over");
         String playerName = InputController.readString("Please enter your name(no more 10 letters)");
         if (playerName.length()>10) {
