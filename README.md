@@ -2,7 +2,6 @@
 Console-tetris-game
 
 
-Type start(); to get started
 
 The game is made on the choices in the console that are read by the scanner.
 
